@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>My First Website - Fee Calculation</title>
+    <style>
+        body {
+            background-color: #f0f0f0;
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #333;
+            text-align: center;
+        }
+        p {
+            color: #555;
+            font-size: 18px;
+            text-align: center;
+        }
+        .form-container, .result-container {
+            width: 300px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #f4f4f4;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        label, select {
+            display: block;
+            margin-bottom: 10px;
+            width: 100%;
+        }
+        .result-container div {
+            margin-bottom: 10px;
+        }
+        #feesResult {
+            font-size: 18px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Welcome to My Fee Calculation Website!</h1>
+    <p>This website helps you calculate your tuition, bus, and hostel fees based on your choices.</p>
+
+    <div class="form-container">
+        <label for="department">Department:</label>
+        <select id="department" onchange="calculateFees()">
+            <option value="">Select Department</option>
+            <option value="engineering">Engineering</option>
+            <option value="medicine">Medicine</option>
+            <option value="management">Management</option>
+            <option value="civil">Civil Engineering</option>
+            <option value="mechanical">Mechanical Engineering</option>
+            <option value="csbs">Computer Science and Business Statistics</option>
+            <option value="it">Information Technology</option>
+            <option value="cyber">Cyber Security</option>
+            <option value="ai">Artificial Intelligence and Data Science</option>
+        </select>
+
+        <label for="quota">Quota:</label>
+        <select id="quota" onchange="calculateFees()">
+            <option value="">Select Quota</option>
+            <option value="general">General</option>
+            <option value="management">Management</option>
+        </select>
+
+        <label for="firstGraduate">First Graduate:</label>
+        <select id="firstGraduate" onchange="calculateFees()">
+            <option value="">Select Option</option>
+            <option value="first">Yes</option>
+            <option value="no">No</option>
+        </select>
+
+        <label for="busRoute">Bus Route:</label>
+        <select id="busRoute" onchange="calculateFees()">
+            <option value="">Select Route</option>
+            <option value="route1">Route 1</option>
+            <option value="route2">Route 2</option>
+            <option value="route3">Route 3</option>
+        </select>
+
+        <label for="hostelType">Hostel Type:</label>
+        <select id="hostelType" onchange="calculateFees()">
+            <option value="">Select Hostel Type</option>
+            <option value="yes">Yes</option>
+            <option value="no">No</option>
+        </select>
+    </div>
+
+    <div class="result-container">
+        <div id="feesResult"></div>
+    </div>
+
+    <script>
+        function calculateFees() {
+            const department = document.getElementById("department").value;
+            const quota = document.getElementById("quota").value;
+            const firstGraduate = document.getElementById("firstGraduate").value;
+            const busRoute = document.getElementById("busRoute").value;
+            const hostelType = document.getElementById("hostelType").value;
+
+            let tuitionFees = 0;
+            let bookFees = 0;
+            let busFees = 0;
+            let hostelFees = 0;
+            let discount = 0;
+
+            // Tuition and book fees logic
+            const feeStructure = {
+                engineering: { general: [50000, 20000], management: [85500, 25000] },
+                medicine: { general: [55000, 2000], management: [85000, 25000] },
+                management: { general: [80000, 15000], management: [85000, 20000] },
+                civil: { general: [80000, 15000], management: [85000, 20000] },
+                mechanical: { general: [80000, 15000], management: [85000, 20000] },
+                csbs: { general: [80000, 15000], management: [85000, 20000] },
+                it: { general: [80000, 15000], management: [85000, 20000] },
+                cyber: { general: [80000, 15000], management: [85000, 20000] },
+                ai: { general: [80000, 15000], management: [55000, 20000] }
+            };
+
+            if (feeStructure[department] && feeStructure[department][quota]) {
+                [tuitionFees, bookFees] = feeStructure[department][quota];
+            }
+
+            // Bus fees
+            if (busRoute === "route1") {
+                busFees = 10000;
+            } else if (busRoute === "route2") {
+                busFees = 15000;
+            } else if (busRoute === "route3") {
+                busFees = 20000;
+            }
+
+            // Hostel fees
+            if (hostelType === "yes") {
+                hostelFees = 65000;
+            }
+
+            // First graduate discount
+            if (firstGraduate === "first") {
+                discount = 25000;
+            }
+
+            const finalFee = tuitionFees + bookFees + busFees + hostelFees - discount;
+
+            // Fee breakdown
+            let feesDetails = `<div>Tuition Fees: ₹${tuitionFees}</div>`;
+            feesDetails += `<div>Book Fees: ₹${bookFees}</div>`;
+            feesDetails += `<div>Bus Fees: ₹${busFees}</div>`;
+            feesDetails += `<div>Hostel Fees: ₹${hostelFees}</div>`;
+            if (discount > 0) {
+                feesDetails += `<div>First Graduate Discount: -₹${discount}</div>`;
+            }
+            feesDetails += `<div><strong>Final Fee: ₹${finalFee}</strong></div>`;
+
+            document.getElementById("feesResult").innerHTML = feesDetails;
+        }
+    </script>
+
+</body>
+</html>
